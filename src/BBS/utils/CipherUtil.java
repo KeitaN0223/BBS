@@ -1,9 +1,7 @@
-package utils;
+package BBS.utils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
-import org.apache.commons.codec.binary.Base64;
 
 /**
  * 暗号化ユーティリティー
@@ -29,3 +27,4 @@ public class CipherUtil{
 		}
 	}
 }
+
