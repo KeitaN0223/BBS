@@ -15,6 +15,8 @@ public class UserService {
 
 		Connection connection = null;
 		try {
+			connection = getConnection();
+
 
 			String encPassword = CipherUtil.encrypt(user.getPassword());
 			user.setPassword(encPassword);
@@ -58,17 +60,16 @@ public class UserService {
 		}
 	}
 
-	public User getUser(User userId) {
+	public User getUser(User user) {
 
 		Connection connection = null;
 		try {
 			connection = getConnection();
 
 			UserDao userDao = new UserDao();
-			User user = userDao.insert(connection, userId);
+			userDao.insert(connection, user);
 
 			commit(connection);
-
 			return user;
 		} catch (RuntimeException e) {
 			rollback(connection);

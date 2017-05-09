@@ -89,19 +89,20 @@ public class UserDao {
 		PreparedStatement ps = null;
 		try {
 			StringBuilder sql = new StringBuilder();
-			sql.append("INSERT INTO user ( ");
+			sql.append("INSERT INTO users ( ");
 			sql.append(" account");
 			sql.append(", name");
 			sql.append(", password");
 			sql.append(", branch_id");
 			sql.append(", department_id");
-//TODO is_stoppedを入れるのかどうか
+			sql.append(", is_stopped");
 			sql.append(") VALUES (");
 			sql.append(" ?"); // account
 			sql.append(", ?"); // name
 			sql.append(", ?"); // password
 			sql.append(", ?"); // branch_id
 			sql.append(", ?"); // department_id
+			sql.append(", 0"); // is_stopped
 			sql.append(")");
 
 			ps = connection.prepareStatement(sql.toString());
@@ -109,8 +110,8 @@ public class UserDao {
 			ps.setString(1, user.getAccount());
 			ps.setString(2, user.getName());
 			ps.setString(3, user.getPassword());
-			ps.setString(4, user.getBranchId());
-			ps.setString(5, user.getDepartmentId());
+			ps.setInt(4, user.getBranch_id());
+			ps.setInt(5, user.getDepartment_id());
 
 			ps.executeUpdate();
 		} catch (SQLException e) {

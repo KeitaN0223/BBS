@@ -16,14 +16,13 @@ import org.apache.commons.lang.StringUtils;
 import BBS.beans.User;
 import BBS.service.UserService;
 
-@WebServlet("/signup")
+@WebServlet(urlPatterns = { "/signup" })
 public class SignUpServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
 		request.getRequestDispatcher("signup.jsp").forward(request, response);
 	}
 
@@ -33,19 +32,20 @@ public class SignUpServlet extends HttpServlet {
 
 		List<String> messages = new ArrayList<String>();
 		HttpSession session = request.getSession();
-		User user = new User();
-		user.setAccount(request.getParameter("account"));
-		user.setName(request.getParameter("name"));
-		user.setPassword(request.getParameter("password"));
-		user.setBranchId(request.getParameter("branch_id"));
-		user.setDepartmentId(request.getParameter("department_id"));
-		// user.setIsStopped(request.getParameter("is_stopped"));
 
+		User user = new User();
 		if (isValid(request, messages) == true) {
+//TODO 確認用パスワード入力欄を追加する
+			user.setAccount(request.getParameter("account"));
+			user.setName(request.getParameter("name"));
+			user.setPassword(request.getParameter("password"));
+			user.setBranch_id(Integer.parseInt(request.getParameter("branch_id")));
+			user.setDepartment_id(Integer.parseInt(request.getParameter("department_id")));
 
 			new UserService().register(user);
 
-			response.sendRedirect("./");
+			//TODO 完了したら管理画面へ移行する
+			response.sendRedirect("signup");
 		} else {
 			session.setAttribute("errorMessages", messages);
 			session.setAttribute("user", user);
@@ -59,7 +59,6 @@ public class SignUpServlet extends HttpServlet {
 		String name = request.getParameter("name");
 		String branch_id = request.getParameter("branch_id");
 		String department_id = request.getParameter("department_id");
-		String is_stopped = request.getParameter("is_stopped");
 
 		if (StringUtils.isEmpty(account) == true) {
 			messages.add("アカウント名を入力してください");
@@ -75,9 +74,6 @@ public class SignUpServlet extends HttpServlet {
 		}
 		if (StringUtils.isEmpty(department_id) == true) {
 			messages.add("部署または役職番号を入力してください");
-		}
-		if (StringUtils.isEmpty(is_stopped) == true) {
-			messages.add("ステータスを入力してください");
 		}
 		if (messages.size() == 0) {
 			return true;
