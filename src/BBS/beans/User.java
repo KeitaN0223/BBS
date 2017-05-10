@@ -12,6 +12,7 @@ public class User implements Serializable {
 	private int branch_id;
 	private int department_id;
 	private int is_stopped;
+
 	public int getId() {
 		return id;
 	}

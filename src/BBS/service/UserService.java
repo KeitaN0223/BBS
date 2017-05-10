@@ -60,14 +60,14 @@ public class UserService {
 		}
 	}
 
-	public User getUser(User user) {
+	public User getUser(int user_id) {
 
 		Connection connection = null;
 		try {
 			connection = getConnection();
 
 			UserDao userDao = new UserDao();
-			userDao.insert(connection, user);
+			User user = userDao.getUser(connection, user_id);
 
 			commit(connection);
 			return user;
