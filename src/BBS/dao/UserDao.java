@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import BBS.beans.Account;
 import BBS.beans.User;
 import BBS.exception.NoRowsUpdatedRuntimeException;
 import BBS.exception.SQLRuntimeException;
@@ -150,6 +151,7 @@ public class UserDao {
 			ps.setString(3, user.getName());
 			ps.setInt(4, user.getBranch_id());
 			ps.setInt(5, user.getDepartment_id());
+			ps.setInt(6, user.getId());
 
 			int count = ps.executeUpdate();
 			if (count == 0) {
@@ -160,6 +162,71 @@ public class UserDao {
 		} finally {
 			close(ps);
 		}
+	}
 
+	public void isStop(Connection connection, User user){
+		PreparedStatement ps = null;
+		try {
+			StringBuilder sql = new StringBuilder();
+			sql.append("UPDATE users SET");
+			sql.append("is_stopped = 1");
+
+			sql.append(" WHERE");
+			sql.append(" id = ?");
+
+			ps = connection.prepareStatement(sql.toString());
+
+			ps.setInt(1, user.getId());
+
+			int count = ps.executeUpdate();
+			if (count == 0) {
+				throw new NoRowsUpdatedRuntimeException();
+			}
+		} catch (SQLException e) {
+			throw new SQLRuntimeException(e);
+		} finally {
+			close(ps);
+		}
+	}
+
+	public List<Account> getUserAccount(Connection connection, int num){
+
+		PreparedStatement ps = null;
+		try{
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT * FROM users");
+
+			ps = connection.prepareStatement(sql.toString());
+
+			ResultSet rs = ps.executeQuery();
+			List<Account> ret = toUserAccountList(rs);
+			return ret;
+		}catch(SQLException e){
+			throw new SQLRuntimeException(e);
+		}finally{
+			close(ps);
+		}
+	}
+
+	private List<Account> toUserAccountList(ResultSet rs)throws SQLException{
+
+		List<Account> ret = new ArrayList<Account>();
+		try{
+			while (rs.next()){
+				String account = rs.getString("account");
+				String name = rs.getString("name");
+				int id = rs.getInt("id");
+
+				Account userAccount = new Account();
+				userAccount.setAccount(account);
+				userAccount.setName(name);
+				userAccount.setId(id);
+
+				ret.add(userAccount);
+			}
+			return ret;
+		}finally{
+			close(rs);
+		}
 	}
 }

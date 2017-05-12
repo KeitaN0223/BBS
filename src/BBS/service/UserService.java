@@ -46,7 +46,7 @@ public class UserService {
 			user.setPassword(encPassword);
 
 			UserDao userDao = new UserDao();
-			userDao.insert(connection, user);
+			userDao.update(connection, user);
 
 			commit(connection);
 		} catch (RuntimeException e) {

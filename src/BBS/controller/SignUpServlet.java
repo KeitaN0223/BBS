@@ -44,7 +44,6 @@ public class SignUpServlet extends HttpServlet {
 
 			new UserService().register(user);
 
-			//TODO 完了したら管理画面へ移行する
 			response.sendRedirect("signup");
 		} else {
 			session.setAttribute("errorMessages", messages);
