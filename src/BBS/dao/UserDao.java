@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import BBS.beans.Account;
 import BBS.beans.User;
 import BBS.exception.NoRowsUpdatedRuntimeException;
 import BBS.exception.SQLRuntimeException;
@@ -52,12 +51,18 @@ public class UserDao {
 				String account = rs.getString("account");
 				String name = rs.getString("name");
 				String password = rs.getString("password");
-
+				int branch_id = rs.getInt("branch_id");
+				int department_id = rs.getInt("department_id");
+				int is_stopped = rs.getInt("is_stopped");
 				User user = new User();
+
 				user.setId(id);
 				user.setAccount(account);
 				user.setName(name);
 				user.setPassword(password);
+				user.setBranch_id(branch_id);
+				user.setDepartment_id(department_id);
+				user.setIs_stopped(is_stopped);
 
 				ret.add(user);
 			}
@@ -169,7 +174,7 @@ public class UserDao {
 		try {
 			StringBuilder sql = new StringBuilder();
 			sql.append("UPDATE users SET");
-			sql.append("is_stopped = 1");
+			sql.append(" is_stopped = 1");
 
 			sql.append(" WHERE");
 			sql.append(" id = ?");
@@ -189,7 +194,32 @@ public class UserDao {
 		}
 	}
 
-	public List<Account> getUserAccount(Connection connection, int num){
+	public void isStart(Connection connection, User user){
+		PreparedStatement ps = null;
+		try {
+			StringBuilder sql = new StringBuilder();
+			sql.append("UPDATE users SET");
+			sql.append(" is_stopped = 0");
+
+			sql.append(" WHERE");
+			sql.append(" id = ?");
+
+			ps = connection.prepareStatement(sql.toString());
+
+			ps.setInt(1, user.getId());
+
+			int count = ps.executeUpdate();
+			if (count == 0) {
+				throw new NoRowsUpdatedRuntimeException();
+			}
+		} catch (SQLException e) {
+			throw new SQLRuntimeException(e);
+		} finally {
+			close(ps);
+		}
+	}
+
+	public List<User> getUserAccount(Connection connection, int num){
 
 		PreparedStatement ps = null;
 		try{
@@ -199,7 +229,7 @@ public class UserDao {
 			ps = connection.prepareStatement(sql.toString());
 
 			ResultSet rs = ps.executeQuery();
-			List<Account> ret = toUserAccountList(rs);
+			List<User> ret = toUserAccountList(rs);
 			return ret;
 		}catch(SQLException e){
 			throw new SQLRuntimeException(e);
@@ -208,19 +238,21 @@ public class UserDao {
 		}
 	}
 
-	private List<Account> toUserAccountList(ResultSet rs)throws SQLException{
+	private List<User> toUserAccountList(ResultSet rs)throws SQLException{
 
-		List<Account> ret = new ArrayList<Account>();
+		List<User> ret = new ArrayList<User>();
 		try{
 			while (rs.next()){
 				String account = rs.getString("account");
 				String name = rs.getString("name");
 				int id = rs.getInt("id");
+				int is_stopped = rs.getInt("is_stopped");
 
-				Account userAccount = new Account();
+				User userAccount = new User();
 				userAccount.setAccount(account);
 				userAccount.setName(name);
 				userAccount.setId(id);
+				userAccount.setIs_stopped(is_stopped);
 
 				ret.add(userAccount);
 			}

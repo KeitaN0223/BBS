@@ -7,6 +7,19 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>ユーザー管理</title>
+<script type="text/javascript">
+<!--
+
+function disp(str){
+	if(confirm(str+"しますか？")){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+// -->
+</script>
 </head>
 <body>
 	<div class="main-contents">
@@ -20,7 +33,18 @@
 		<span class="account">アカウント名<c:out value="${account.account }" /></span>
 		<span class="name">ユーザー名<c:out value="${account.name }" /></span>
 		<input type="hidden" name = "id" value="${account.id }">
-		<button id="${account.id }" onclick="alert('${account.name}を停止します')">停止</button>
+
+		${account.is_stopped }
+		<c:choose>
+			<c:when test ="${account.is_stopped == 0}">
+				<input type="hidden" name = "is_stopped" value="1">
+				<input type="submit" value="停止" onClick="return disp('${account.name}を停止');">
+			</c:when>
+			<c:otherwise>
+				<input type="hidden" name = "is_stopped" value="0">
+				<input type="submit" value="復活" onClick="return disp('${account.name}を復活');">
+			</c:otherwise>
+		</c:choose>
 		<a href="setting?id=${account.id }">編集</a>
 	</form>
 		</div>
