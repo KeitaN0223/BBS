@@ -14,6 +14,19 @@
 	<a href="post">新規投稿画面</a>
 	<a href="admin">ユーザー管理画面</a>
 </div>
+<div class="posts">
+	<c:forEach items="{posts}" var="post">
+		<div class="post">
+			<div class="subject">
+				<span class="subject"><c:out value="${posts.subject }"/></span>
+				<span class="post_text"><c:out value="${posts.text }"/></span>
+				<span class="post_created_at"><c:out value="${posts.created_at}"/></span>
+				<span class="post_name"><c:out value="${posts.name }"/></span>
+				<span class="comment"><c:out value="${posts.comment }"/></span>
+			</div>
+		</div>
+	</c:forEach>
+</div>
 
 <div class="copyright">Copyright(c)Keita Nagano</div>
 </div>

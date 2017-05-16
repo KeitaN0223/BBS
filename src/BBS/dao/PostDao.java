@@ -16,7 +16,7 @@ public class PostDao {
 		PreparedStatement ps = null;
 		try {
 			StringBuilder sql = new StringBuilder();
-			sql.append("INSERT INTO message ( ");
+			sql.append("INSERT INTO posts ( ");
 			sql.append("id");
 			sql.append(", user_id");
 			sql.append(", subject");
@@ -34,8 +34,10 @@ public class PostDao {
 
 			ps = connection.prepareStatement(sql.toString());
 
-			ps.setInt(1, post.getUserId());
-			ps.setString(2, post.getText());
+			ps.setInt(1, post.getUser_id());
+			ps.setString(2, post.getSubject());
+			ps.setString(3, post.getText());
+			ps.setString(4, post.getCategory());
 
 			ps.executeUpdate();
 		} catch (SQLException e) {

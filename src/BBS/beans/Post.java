@@ -7,7 +7,7 @@ public class Post implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private int id;
-	private int userId;
+	private int user_id;
 	private String subject;
 	private String text;
 	private String category;
@@ -18,11 +18,11 @@ public class Post implements Serializable {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getUserId() {
-		return userId;
+	public int getUser_id() {
+		return user_id;
 	}
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public void setUser_id(int user_id) {
+		this.user_id = user_id;
 	}
 	public String getSubject() {
 		return subject;
@@ -48,7 +48,4 @@ public class Post implements Serializable {
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
 	}
-
-
-
 }

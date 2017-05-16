@@ -21,6 +21,12 @@ public class PostServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+
+		request.getRequestDispatcher("/post.jsp").forward(request, response);
+	}
+
+	@Override
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, ServletException {
 
@@ -33,29 +39,31 @@ public class PostServlet extends HttpServlet {
 			User user = (User) session.getAttribute("loginUser");
 
 			Post post = new Post();
+			post.setUser_id(user.getId());
+			post.setSubject(request.getParameter("subject"));
 			post.setText(request.getParameter("post"));
-			post.setUserId(user.getId());
+			post.setCategory(request.getParameter("category"));
 
 			new PostService().register(post);
 
-			response.sendRedirect("./");
+			response.sendRedirect("index");
 		} else {
 			session.setAttribute("errorMessages", messages);
-			response.sendRedirect("./");
+			response.sendRedirect("post");
 		}
 	}
 
-	private boolean isValid(HttpServletRequest request, List<String> messages) {
+	private boolean isValid(HttpServletRequest request, List<String> post) {
 
-		String Post = request.getParameter("message");
+		String Post = request.getParameter("post");
 
-		if (StringUtils.isEmpty(post) == true) {
-			Post.add("メッセージを入力してください");
+		if (StringUtils.isEmpty(Post) == true) {
+			post.add("メッセージを入力してください");
 		}
-		if (1000 <= post.length()) {
-			Post.add("1000文字以下で入力してください");
+		if (1000 <= Post.length()) {
+			post.add("1000文字以下で入力してください");
 		}
-		if (Post.size() == 0) {
+		if (post.size() == 0) {
 			return true;
 		} else {
 			return false;
