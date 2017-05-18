@@ -53,9 +53,9 @@ public class TopServlet extends HttpServlet {
 
 		HttpSession session = request.getSession();
 
-		List<String> messages = new ArrayList<String>();
+		List<String> comments = new ArrayList<String>();
 
-		if (isValid(request, messages) == true) {
+		if (isValid(request, comments) == true) {
 
 			User user = (User) session.getAttribute("loginUser");
 
@@ -68,22 +68,22 @@ public class TopServlet extends HttpServlet {
 
 			response.sendRedirect("index");
 		} else {
-			session.setAttribute("errorMessages", messages);
+			session.setAttribute("errorMessages", comments);
 			response.sendRedirect("index");
 		}
 	}
 
-	private boolean isValid(HttpServletRequest request, List<String> post) {
+	private boolean isValid(HttpServletRequest request, List<String> comments) {
 
 		String Comment = request.getParameter("comment");
 
 		if (StringUtils.isEmpty(Comment) == true) {
-			post.add("メッセージを入力してください");
+			comments.add("コメントを入力してください");
 		}
 		if (500 <= Comment.length()) {
-			post.add("500文字以下で入力してください");
+			comments.add("500文字以下で入力してください");
 		}
-		if (post.size() == 0) {
+		if (comments.size() == 0) {
 			return true;
 		} else {
 			return false;

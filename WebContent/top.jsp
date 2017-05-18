@@ -15,6 +15,16 @@
 	<a href="admin">ユーザー管理画面</a>
 	<a href="logout">ログアウト</a>
 </div>
+<c:if test="${ not empty errorMessages }">
+	<div class="errorMessages">
+		<ul>
+			<c:forEach items="${errorMessages }" var="message">
+				<li><c:out value="${message}" />
+			</c:forEach>
+		</ul>
+	</div>
+	<c:remove var="errorMessages" scope="session"/>
+</c:if>
 <div class="posts">
 	<c:forEach items="${posts}" var="post">
 		<div class="post">

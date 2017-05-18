@@ -13,7 +13,11 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 
+import BBS.beans.Branch;
+import BBS.beans.Department;
 import BBS.beans.User;
+import BBS.service.BranchService;
+import BBS.service.DepartmentService;
 import BBS.service.UserService;
 
 @WebServlet(urlPatterns = { "/signup" })
@@ -23,6 +27,11 @@ public class SignUpServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
+		List<Branch> branches = new BranchService().getBranches();
+		List<Department> departments = new DepartmentService().getDepartments();
+		request.setAttribute("branches", branches);
+		request.setAttribute("departments", departments);
 		request.getRequestDispatcher("signup.jsp").forward(request, response);
 	}
 
@@ -35,7 +44,6 @@ public class SignUpServlet extends HttpServlet {
 
 		User user = new User();
 		if (isValid(request, messages) == true) {
-//TODO 確認用パスワード入力欄を追加する
 			user.setAccount(request.getParameter("account"));
 			user.setName(request.getParameter("name"));
 			user.setPassword(request.getParameter("password"));
@@ -55,6 +63,7 @@ public class SignUpServlet extends HttpServlet {
 	private boolean isValid(HttpServletRequest request, List<String> messages) {
 		String account = request.getParameter("account");
 		String password = request.getParameter("password");
+		String confirm_password = request.getParameter("confirm_password");
 		String name = request.getParameter("name");
 		String branch_id = request.getParameter("branch_id");
 		String department_id = request.getParameter("department_id");
@@ -64,6 +73,9 @@ public class SignUpServlet extends HttpServlet {
 		}
 		if (StringUtils.isEmpty(password) == true) {
 			messages.add("パスワードを入力してください");
+		}
+		if (StringUtils.equals(password, confirm_password) != true){
+			messages.add("パスワードが一致しません");
 		}
 		if (StringUtils.isEmpty(name) == true) {
 			messages.add("名前を入力してください");

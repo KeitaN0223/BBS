@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.StringUtils;
 
 import BBS.beans.Post;
+import BBS.beans.Post_comment;
 import BBS.beans.User;
 import BBS.service.PostService;
 @WebServlet(urlPatterns = { "/post" })
@@ -23,6 +24,9 @@ public class PostServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
 
+		List<Post_comment> posts = new PostService().getMessage();
+
+		request.setAttribute("posts", posts);
 		request.getRequestDispatcher("/post.jsp").forward(request, response);
 	}
 
@@ -56,12 +60,23 @@ public class PostServlet extends HttpServlet {
 	private boolean isValid(HttpServletRequest request, List<String> post) {
 
 		String Post = request.getParameter("post");
+		String Subject = request.getParameter("subject");
+		String Category = request.getParameter("category");
 
+		if (StringUtils.isEmpty(Subject) == true){
+			post.add("件名を入力してください");
+		}
+		if (50 <= Subject.length()){
+			post.add("件名は50文字以下で入力してください");
+		}
 		if (StringUtils.isEmpty(Post) == true) {
-			post.add("メッセージを入力してください");
+			post.add("投稿内容を入力してください");
 		}
 		if (1000 <= Post.length()) {
-			post.add("1000文字以下で入力してください");
+			post.add("投稿内容は1000文字以下で入力してください");
+		}
+		if (StringUtils.isEmpty(Category) == true){
+			post.add("カテゴリーを入力してください");
 		}
 		if (post.size() == 0) {
 			return true;

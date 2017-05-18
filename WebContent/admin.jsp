@@ -25,6 +25,7 @@ function disp(str){
 	<div class="main-contents">
 		<div class="header">
 			<a href="signup">新規登録</a>
+			<a href="index">ホーム画面</a>
 		</div>
 		<div class="userAccount">
 		<c:forEach items="${account}" var="account">

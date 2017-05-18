@@ -9,6 +9,7 @@
 	<title>${editUser.name }の編集</title>
 </head>
 <body>
+<a href="admin">戻る</a>
 <div class="main-contents">
 
 <c:if test="${ not empty errorMessages }">
@@ -33,15 +34,42 @@
 	<label for="password">パスワード</label>
 	<input name="password" type="password" id="password"/> <br />
 
-	<label for="branch_id">支店番号</label>
-	<input name="branch_id" value="${editUser.branch_id}" id="branch_id"/><br />
+	<label for="branch_id">支店名</label>
+	<select name = "branch_id" size = "1">
+		<c:forEach items="${branches}" var="branch">
+			<c:if test="${editUser.branch_id == branch.id }" var="selected"/>
+				<c:if test="${selected }">
+					<option value = "${branch.id}" selected >
+					<c:out value ="${branch.name }" />
+					</option>
+				</c:if>
+				<c:if test="${!selected }">
+					<option value = "${branch.id }">
+					<c:out value ="${branch.name }" />
+					</option>
+				</c:if>
+		</c:forEach>
+	</select><br />
 
-	<label for="department_id">部署または役職番号</label>
-	<input name="department_id" value="${editUser.department_id}" id="department_id"/><br />
+	<label for="department_id">部署または役職</label>
+	<select name ="department_id" size ="1">
+		<c:forEach items="${departments}" var="department">
+			<c:if test="${editUser.department_id == department.id }" var="selected"/>
+				<c:if test="${selected }">
+					<option value = "${department.id}" selected >
+					<c:out value ="${department.name }" />
+					</option>
+				</c:if>
+				<c:if test="${!selected }">
+					<option value = "${department.id }">
+					<c:out value ="${department.name }" />
+					</option>
+				</c:if>
+		</c:forEach>
+	</select><br />
 
 	<input type="hidden" name = "id" value="${editUser.id }" >
 	<input type="submit" value="登録" /> <br />
-	<a href="./">戻る</a>
 </form>
 <div class="copyright">Copyright(c)Keita Nagano</div>
 </div>

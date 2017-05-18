@@ -14,8 +14,12 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 
+import BBS.beans.Branch;
+import BBS.beans.Department;
 import BBS.beans.User;
 import BBS.exception.NoRowsUpdatedRuntimeException;
+import BBS.service.BranchService;
+import BBS.service.DepartmentService;
 import BBS.service.UserService;
 
 @WebServlet(urlPatterns = { "/setting" })
@@ -31,9 +35,15 @@ public class SettingServlet extends HttpServlet {
 
 		UserService userService = new UserService();
 		User editUser = userService.getUser(editUserId);
+		List<Branch> branches = new BranchService().getBranches();
+		List<Department> departments = new DepartmentService().getDepartments();
 
+		HttpSession session = request.getSession();
 		request.setAttribute("editUser", editUser);
+		session.setAttribute("branches", branches);
+		session.setAttribute("departments", departments);
 		request.getRequestDispatcher("setting.jsp").forward(request, response);
+
 	}
 
 	@Override
@@ -80,10 +90,14 @@ public class SettingServlet extends HttpServlet {
 	private boolean isValid(HttpServletRequest request, List<String> messages) {
 
 		String account = request.getParameter("account");
+		String name = request.getParameter("name");
 		String password = request.getParameter("password");
 
 		if (StringUtils.isEmpty(account) == true) {
 			messages.add("アカウント名を入力してください");
+		}
+		if (StringUtils.isEmpty(name) == true){
+			messages.add("名前を入力してください");
 		}
 		if (StringUtils.isEmpty(password) == true) {
 			messages.add("パスワードを入力してください");

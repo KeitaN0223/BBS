@@ -9,6 +9,7 @@
 <title>ユーザー登録</title>
 </head>
 <body>
+<a href="admin">戻る</a>
 <div class="main-contents">
 <c:if test="${ not empty errorMessages }">
 	<div class="errorMessages">
@@ -20,8 +21,9 @@
 	</div>
 	<c:remove var="errorMessages" scope="session"/>
 </c:if>
-</div>
+
 <form action="signup" method="post"><br />
+
 	<label for="account">アカウント名</label>
 	<input name="account" value="${user.account }" id="account"/><br />
 
@@ -31,15 +33,35 @@
 	<label for="password">パスワード</label>
 	<input name="password" type="password" id="password"/><br />
 
-	<label for="branch_id">支店番号</label>
-	<input name="branch_id" value="${user.branch_id }" id="branch_id"><br />
+	<label for="confirm_password">パスワード確認</label>
+	<input name="confirm_password" type="password" id="confirm_password"/><br />
+
+	<label for="branch_id">支店名</label>
+	<select name = "branch_id" size = "1">
+		<c:forEach items="${branches}" var="branch">
+			<option value = "${branch.id}">
+				<c:out value ="${branch.name}"/>
+			</option>
+		</c:forEach>
+	</select><br />
 
 	<label for="department_id">部署または役職番号</label>
-	<input name="department_id" value="${user.department_id }" id="department_id"><br />
+	<select name ="department_id" size ="1">
+		<c:forEach items="${departments}" var="department">
+			<option value = "${department.id}">
+				<c:out value ="${department.name}"/>
+			</option>
+		</c:forEach>
+	</select><br />
+
 
 	<input type="submit" value="登録" /><br />
-	<a href="./">戻る</a>
 </form>
+
+
+</div>
+
 <div class="copyright">Copyright(c)Keita Nagano</div>
+
 </body>
 </html>
