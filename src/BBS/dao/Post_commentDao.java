@@ -10,21 +10,27 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import BBS.beans.Category;
 import BBS.beans.Post_comment;
 import BBS.exception.SQLRuntimeException;
 
 public class Post_commentDao {
 
-	public List<Post_comment> getUserMessages(Connection connection, int num) {
+	public List<Post_comment> getUserMessages(Connection connection, int num, String startDate, String endDate) {
 
 		PreparedStatement ps = null;
 		try {
 			StringBuilder sql = new StringBuilder();
 			sql.append("SELECT * FROM users_posts ");
+			sql.append("WHERE created_at >= ? AND created_at < date_add(?, interval 1 day) ");
 			sql.append("ORDER BY created_at DESC limit " + num);
 
 			ps = connection.prepareStatement(sql.toString());
 
+			ps.setString(1, startDate);
+			ps.setString(2, endDate);
+
+			System.out.println(ps);
 			ResultSet rs = ps.executeQuery();
 			List<Post_comment> ret = toUserMessageList(rs);
 			return ret;
@@ -59,6 +65,46 @@ public class Post_commentDao {
 				//message.setComment(comment);
 
 				ret.add(message);
+			}
+			return ret;
+		} finally {
+			close(rs);
+		}
+	}
+
+	public List<Category> getCategories(Connection connection, String category){
+
+		PreparedStatement ps = null;
+		try {
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT distinct category FROM posts ");
+
+			ps = connection.prepareStatement(sql.toString());
+
+System.out.println(ps);
+			ResultSet rs = ps.executeQuery();
+			List<Category> ret = toCategoryList(rs);
+			return ret;
+		} catch (SQLException e) {
+			throw new SQLRuntimeException(e);
+		} finally {
+			close(ps);
+		}
+	}
+
+	private List<Category> toCategoryList(ResultSet rs)
+			throws SQLException {
+
+		List<Category> ret = new ArrayList<Category>();
+		try {
+			while (rs.next()) {
+				String category = rs.getString("category");
+
+				Category categoryList = new Category();
+				categoryList.setCategory(category);
+				//message.setComment(comment);
+
+				ret.add(categoryList);
 			}
 			return ret;
 		} finally {

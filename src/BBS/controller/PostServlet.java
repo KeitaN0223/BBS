@@ -2,6 +2,7 @@ package BBS.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -24,7 +25,11 @@ public class PostServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
 
-		List<Post_comment> posts = new PostService().getMessage();
+		Date date = new Date();
+		String startDate = "2017-05-17";
+		String endDate = date.toString();
+
+		List<Post_comment> posts = new PostService().getMessage(startDate, endDate);
 
 		request.setAttribute("posts", posts);
 		request.getRequestDispatcher("/post.jsp").forward(request, response);

@@ -25,6 +25,22 @@
 	</div>
 	<c:remove var="errorMessages" scope="session"/>
 </c:if>
+<div class="refine">
+	<form action="index" method="get">
+		カテゴリー
+		<select name = "categories" size = "1" >
+		<c:forEach items="${categories}" var="category">
+			<option value = "${category.category}">
+				<c:out value ="${category.category}"/>
+			</option>
+		</c:forEach>
+		</select>
+		投稿日時
+		<input type="date" name = "startDate" value = "startDate">から
+		<input type="date" name = "endDate" value = "endDate">まで
+		<input type="submit" value ="表示">
+	</form>
+</div>
 <div class="posts">
 	<c:forEach items="${posts}" var="post">
 		<div class="post">

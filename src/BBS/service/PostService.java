@@ -6,6 +6,7 @@ import static BBS.utils.DBUtil.*;
 import java.sql.Connection;
 import java.util.List;
 
+import BBS.beans.Category;
 import BBS.beans.Post;
 import BBS.beans.Post_comment;
 import BBS.dao.PostDao;
@@ -36,14 +37,37 @@ public class PostService {
 
 	private static final int LIMIT_NUM = 1000;
 
-	public List<Post_comment> getMessage() {
+	public List<Post_comment> getMessage(String startDate, String endDate) {
 
 		Connection connection = null;
 		try {
 			connection = getConnection();
 
 			Post_commentDao messageDao = new Post_commentDao();
-			List<Post_comment> ret = messageDao.getUserMessages(connection, LIMIT_NUM);
+			List<Post_comment> ret = messageDao.getUserMessages(connection, LIMIT_NUM, startDate, endDate);
+
+			commit(connection);
+
+			return ret;
+		} catch (RuntimeException e) {
+			rollback(connection);
+			throw e;
+		} catch (Error e) {
+			rollback(connection);
+			throw e;
+		} finally {
+			close(connection);
+		}
+	}
+
+	public List<Category> getCategory(String category){
+
+		Connection connection = null;
+		try{
+			connection = getConnection();
+
+			Post_commentDao categoryDao = new Post_commentDao();
+			List<Category> ret = categoryDao.getCategories(connection, category);
 
 			commit(connection);
 

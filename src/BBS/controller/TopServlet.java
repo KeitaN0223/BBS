@@ -2,6 +2,7 @@ package BBS.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -11,15 +12,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
+import BBS.beans.Category;
 import BBS.beans.Comment;
 import BBS.beans.Post_comment;
 import BBS.beans.ShowComment;
 import BBS.beans.User;
 import BBS.service.CommentService;
 import BBS.service.PostService;
-//import BBS.beans.User;
 
 
 @WebServlet(urlPatterns = { "/index" })
@@ -30,20 +31,26 @@ public class TopServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 				throws IOException, ServletException {
 
-/*		User user = (User) request.getSession().getAttribute("loginUser");
-		boolean isShowMessageForm;
-		if (user != null){
-			isShowMessageForm = true;
-		}else{
-			isShowMessageForm = false;
-		}
-*/
+		String startDate = null;
+		String endDate = null;
+		String category = null;
 
-		List<Post_comment> posts = new PostService().getMessage();
+		if(StringUtils.isEmpty(request.getParameter("startDate")) && (StringUtils.isEmpty(request.getParameter("endDate")))){
+			Date date = new Date();
+			startDate = "2017-05-01";
+			endDate = date.toString();
+		}else {
+			startDate = request.getParameter("startDate");
+			endDate = request.getParameter("endDate");
+		}
+
+		List<Category> categories = new PostService().getCategory(category);
+		List<Post_comment> posts = new PostService().getMessage(startDate, endDate);
 		List<ShowComment> comments = new CommentService().getMessage();
+
+		request.setAttribute("categories", categories);
 		request.setAttribute("posts", posts);
 		request.setAttribute("comments", comments);
-		//request.setAttribute("isShowMessageForm", isShowMessageForm);
 		request.getRequestDispatcher("/top.jsp").forward(request, response);
 	}
 
