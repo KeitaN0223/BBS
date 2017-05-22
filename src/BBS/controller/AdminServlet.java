@@ -40,8 +40,6 @@ public class AdminServlet extends HttpServlet {
 			isStopUser.setIs_stopped(0);
 			new UserService().startUser(isStopUser);
 		}
-
-
 		response.sendRedirect("admin");
 	}
 }

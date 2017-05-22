@@ -10,6 +10,13 @@ public class ShowComment implements Serializable {
 	private int post_id;
 	private String text;
 	private Timestamp created_at;
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	private int id;
 	public String getName() {
 		return name;
 	}

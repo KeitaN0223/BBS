@@ -34,8 +34,6 @@ function disp(str){
 		<span class="account">アカウント名<c:out value="${account.account }" /></span>
 		<span class="name">ユーザー名<c:out value="${account.name }" /></span>
 		<input type="hidden" name = "id" value="${account.id }">
-
-		${account.is_stopped }
 		<c:choose>
 			<c:when test ="${account.is_stopped == 0}">
 				<input type="hidden" name = "is_stopped" value="1">
@@ -47,6 +45,10 @@ function disp(str){
 			</c:otherwise>
 		</c:choose>
 		<a href="setting?id=${account.id }">編集</a>
+	</form>
+	<form action="delete" method="post">
+		<input type="hidden" name = "id" value="${account.id }">
+		<input type="submit" value="削除" onClick="return disp('${account.name }を削除');">
 	</form>
 		</div>
 		</c:forEach>

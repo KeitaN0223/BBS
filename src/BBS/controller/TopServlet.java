@@ -1,6 +1,7 @@
 package BBS.controller;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,7 +23,6 @@ import BBS.beans.User;
 import BBS.service.CommentService;
 import BBS.service.PostService;
 
-
 @WebServlet(urlPatterns = { "/index" })
 public class TopServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -34,18 +34,27 @@ public class TopServlet extends HttpServlet {
 		String startDate = null;
 		String endDate = null;
 		String category = null;
+				//request.getParameter("category");
+		//request.setAttribute("selectedCategory", category);
 
+		//if(!request.getParameter("category").isEmpty()){
+		//	category = request.getParameter("category");
+		//}
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		if(!StringUtils.isEmpty(request.getParameter("category"))){
+			category = request.getParameter("category");
+		}
 		if(StringUtils.isEmpty(request.getParameter("startDate")) && (StringUtils.isEmpty(request.getParameter("endDate")))){
-			Date date = new Date();
 			startDate = "2017-05-01";
-			endDate = date.toString();
+			endDate = sdf.format(date).toString();
 		}else {
 			startDate = request.getParameter("startDate");
 			endDate = request.getParameter("endDate");
 		}
 
 		List<Category> categories = new PostService().getCategory(category);
-		List<Post_comment> posts = new PostService().getMessage(startDate, endDate);
+		List<Post_comment> posts = new PostService().getMessage(startDate, endDate, category);
 		List<ShowComment> comments = new CommentService().getMessage();
 
 		request.setAttribute("categories", categories);

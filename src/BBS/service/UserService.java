@@ -17,7 +17,6 @@ public class UserService {
 		try {
 			connection = getConnection();
 
-
 			String encPassword = CipherUtil.encrypt(user.getPassword());
 			user.setPassword(encPassword);
 
@@ -101,7 +100,6 @@ public class UserService {
 		} finally {
 			close(connection);
 		}
-
 	}
 
 	public void startUser(User user) {
@@ -126,5 +124,24 @@ public class UserService {
 
 	}
 
-}
+	public void deleteUser(int id) {
 
+		Connection connection = null;
+		try {
+			connection = getConnection();
+
+			UserDao deleteDao = new UserDao();
+			deleteDao.delete(connection, id);
+
+			commit(connection);
+		} catch (RuntimeException e) {
+			rollback(connection);
+			throw e;
+		} catch (Error e) {
+			rollback(connection);
+			throw e;
+		} finally {
+			close(connection);
+		}
+	}
+}

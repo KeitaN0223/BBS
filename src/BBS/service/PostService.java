@@ -35,16 +35,14 @@ public class PostService {
 		}
 	}
 
-	private static final int LIMIT_NUM = 1000;
-
-	public List<Post_comment> getMessage(String startDate, String endDate) {
+	public List<Post_comment> getMessage(String startDate, String endDate, String category) {
 
 		Connection connection = null;
 		try {
 			connection = getConnection();
 
 			Post_commentDao messageDao = new Post_commentDao();
-			List<Post_comment> ret = messageDao.getUserMessages(connection, LIMIT_NUM, startDate, endDate);
+			List<Post_comment> ret = messageDao.getUserMessages(connection, startDate, endDate, category);
 
 			commit(connection);
 

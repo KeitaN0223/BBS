@@ -28,8 +28,9 @@ public class PostServlet extends HttpServlet {
 		Date date = new Date();
 		String startDate = "2017-05-17";
 		String endDate = date.toString();
+		String category = null;
 
-		List<Post_comment> posts = new PostService().getMessage(startDate, endDate);
+		List<Post_comment> posts = new PostService().getMessage(startDate, endDate, category);
 
 		request.setAttribute("posts", posts);
 		request.getRequestDispatcher("/post.jsp").forward(request, response);

@@ -28,7 +28,8 @@
 <div class="refine">
 	<form action="index" method="get">
 		カテゴリー
-		<select name = "categories" size = "1" >
+		<select name = "category" size = "1" >
+		<option value = ""/>
 		<c:forEach items="${categories}" var="category">
 			<option value = "${category.category}">
 				<c:out value ="${category.category}"/>
@@ -60,6 +61,10 @@
 							<c:out value=" ${comment.text }"/><br />
 							<c:out value=" ${comment.name }"/><br />
 							<c:out value=" ${comment.created_at }"/><br /><br />
+							<form action="deleteComment" method="post">
+							<input type="hidden" name = "comment_id" value="${comment.comment_id }">
+							<input type="submit" value="削除" >
+					</form>
 					</c:if>
 				</c:forEach><br />
 		</div>

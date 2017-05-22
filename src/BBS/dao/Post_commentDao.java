@@ -16,21 +16,29 @@ import BBS.exception.SQLRuntimeException;
 
 public class Post_commentDao {
 
-	public List<Post_comment> getUserMessages(Connection connection, int num, String startDate, String endDate) {
+	public List<Post_comment> getUserMessages(Connection connection, String startDate, String endDate, String category) {
 
 		PreparedStatement ps = null;
 		try {
 			StringBuilder sql = new StringBuilder();
 			sql.append("SELECT * FROM users_posts ");
 			sql.append("WHERE created_at >= ? AND created_at < date_add(?, interval 1 day) ");
-			sql.append("ORDER BY created_at DESC limit " + num);
+
+			if(category != null){
+				sql.append("AND category = ?");
+			}
+
+			sql.append("ORDER BY created_at DESC ");
 
 			ps = connection.prepareStatement(sql.toString());
 
 			ps.setString(1, startDate);
 			ps.setString(2, endDate);
 
-			System.out.println(ps);
+			if(category != null){
+				ps.setString(3, category);
+			}
+
 			ResultSet rs = ps.executeQuery();
 			List<Post_comment> ret = toUserMessageList(rs);
 			return ret;
@@ -81,7 +89,6 @@ public class Post_commentDao {
 
 			ps = connection.prepareStatement(sql.toString());
 
-System.out.println(ps);
 			ResultSet rs = ps.executeQuery();
 			List<Category> ret = toCategoryList(rs);
 			return ret;
