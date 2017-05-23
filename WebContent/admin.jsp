@@ -23,9 +23,19 @@ function disp(str){
 </head>
 <body>
 	<div class="main-contents">
+<c:if test="${ not empty errorMessages }">
+	<div class="errorMessages">
+		<ul>
+			<c:forEach items="${errorMessages }" var="message">
+				<li><c:out value="${message}" />
+			</c:forEach>
+		</ul>
+	</div>
+	<c:remove var="errorMessages" scope="session"/>
+</c:if>
 		<div class="header">
 			<a href="signup">新規登録</a>
-			<a href="index">ホーム画面</a>
+			<a href="./">ホーム画面</a>
 		</div>
 		<div class="userAccount">
 		<c:forEach items="${account}" var="account">
@@ -46,7 +56,7 @@ function disp(str){
 		</c:choose>
 		<a href="setting?id=${account.id }">編集</a>
 	</form>
-	<form action="delete" method="post">
+	<form action="delete" method="post" style="display:inline;">
 		<input type="hidden" name = "id" value="${account.id }">
 		<input type="submit" value="削除" onClick="return disp('${account.name }を削除');">
 	</form>

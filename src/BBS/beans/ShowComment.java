@@ -6,17 +6,19 @@ import java.sql.Timestamp;
 public class ShowComment implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private int comment_id;
 	private String name;
 	private int post_id;
 	private String text;
 	private Timestamp created_at;
-	public int getId() {
-		return id;
+
+	public int getComment_id() {
+		return comment_id;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setComment_id(int comment_id) {
+		this.comment_id = comment_id;
 	}
-	private int id;
+
 	public String getName() {
 		return name;
 	}

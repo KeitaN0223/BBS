@@ -8,10 +8,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import BBS.service.CommentService;
+import BBS.service.PostService;
 
-@WebServlet(urlPatterns = {"/deleteComment"})
-public class DeleteCommentServlet extends HttpServlet {
+@WebServlet(urlPatterns = {"/deletePost"})
+public class DeletePostServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
@@ -22,7 +22,7 @@ public class DeleteCommentServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
 
-		new CommentService().deleteComment(Integer.parseInt(request.getParameter("comment_id")));
+		new PostService().deletePost(Integer.parseInt(request.getParameter("post_id")));
 		response.sendRedirect("./");
 	}
 }

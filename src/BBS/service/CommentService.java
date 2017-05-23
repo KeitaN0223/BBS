@@ -34,8 +34,6 @@ public class CommentService {
 		}
 	}
 
-	private static final int LIMIT_NUM = 1000;
-
 	public List<ShowComment> getMessage() {
 
 		Connection connection = null;
@@ -43,7 +41,7 @@ public class CommentService {
 			connection = getConnection();
 
 			ShowCommentDao messageDao = new ShowCommentDao();
-			List<ShowComment> ret = messageDao.getUserMessages(connection, LIMIT_NUM);
+			List<ShowComment> ret = messageDao.getUserMessages(connection);
 
 			commit(connection);
 

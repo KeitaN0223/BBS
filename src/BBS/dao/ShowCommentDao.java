@@ -15,13 +15,13 @@ import BBS.exception.SQLRuntimeException;
 
 public class ShowCommentDao {
 
-	public List<ShowComment> getUserMessages(Connection connection, int num) {
+	public List<ShowComment> getUserMessages(Connection connection) {
 
 		PreparedStatement ps = null;
 		try {
 			StringBuilder sql = new StringBuilder();
 			sql.append("SELECT * FROM users_comments ");
-			sql.append("ORDER BY created_at DESC limit " + num);
+			sql.append("ORDER BY created_at DESC ");
 
 			ps = connection.prepareStatement(sql.toString());
 
@@ -45,6 +45,7 @@ public class ShowCommentDao {
 				Timestamp created_at = rs.getTimestamp("created_at");
 				String name = rs.getString("name");
 				int post_id = rs.getInt("post_id");
+				int comment_id = rs.getInt("comment_id");
 				//String comment = rs.getString("comment");
 
 				ShowComment message = new ShowComment();
@@ -52,6 +53,7 @@ public class ShowCommentDao {
 				message.setCreated_at(created_at);
 				message.setName(name);
 				message.setPost_id(post_id);
+				message.setComment_id(comment_id);
 				//message.setComment(comment);
 
 				ret.add(message);

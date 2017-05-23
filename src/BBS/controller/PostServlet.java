@@ -56,7 +56,7 @@ public class PostServlet extends HttpServlet {
 
 			new PostService().register(post);
 
-			response.sendRedirect("index");
+			response.sendRedirect("./");
 		} else {
 			session.setAttribute("errorMessages", messages);
 			response.sendRedirect("post");

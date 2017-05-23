@@ -31,18 +31,30 @@ public class SettingServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		int editUserId = Integer.parseInt(request.getParameter("id"));
 
-		UserService userService = new UserService();
-		User editUser = userService.getUser(editUserId);
-		List<Branch> branches = new BranchService().getBranches();
-		List<Department> departments = new DepartmentService().getDepartments();
+
+		List<String> messages = new ArrayList<String>();
 
 		HttpSession session = request.getSession();
-		request.setAttribute("editUser", editUser);
-		session.setAttribute("branches", branches);
-		session.setAttribute("departments", departments);
-		request.getRequestDispatcher("setting.jsp").forward(request, response);
+
+		if (isValidURL(request, messages) == true) {
+
+			int editUserId = Integer.parseInt(request.getParameter("id"));
+			UserService userService = new UserService();
+			User editUser = userService.getUser(editUserId);
+			List<Branch> branches = new BranchService().getBranches();
+			List<Department> departments = new DepartmentService().getDepartments();
+
+			request.setAttribute("editUser", editUser);
+			session.setAttribute("branches", branches);
+			session.setAttribute("departments", departments);
+			request.getRequestDispatcher("setting.jsp").forward(request, response);
+		}else{
+			session.setAttribute("errorMessages", messages);
+			response.sendRedirect("admin");
+		}
+
+
 
 	}
 
@@ -87,27 +99,57 @@ public class SettingServlet extends HttpServlet {
 		return editUser;
 	}
 
+	private boolean isValidURL(HttpServletRequest request, List<String> messages) {
+		if(StringUtils.isEmpty(request.getParameter("id")) || !request.getParameter("id").matches("\\d{1,9}")) {
+			messages.add("不正なURLです");
+		} else{
+			int id = Integer.parseInt(request.getParameter("id"));
+			if((new UserService().getUser(id)) == null){
+				messages.add("ユーザーが存在しません");
+			}
+		}
+
+		if(messages.size()==0){
+			return true;
+			}else{
+			return false;
+			}
+	}
 	private boolean isValid(HttpServletRequest request, List<String> messages) {
 
 		String account = request.getParameter("account");
 		String name = request.getParameter("name");
 		String password = request.getParameter("password");
 
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("loginUser");
+
 		if (StringUtils.isEmpty(account) == true) {
 			messages.add("アカウント名を入力してください");
 		}
-		if (StringUtils.isEmpty(name) == true){
-			messages.add("名前を入力してください");
-		}
-		if (StringUtils.isEmpty(password) == true) {
-			messages.add("パスワードを入力してください");
-		}
-		// TODO アカウントが既に利用されていないか、メールアドレスが既に登録されていないかなどの確認も必要
-		if (messages.size() == 0) {
-			return true;
+
+		if (user.getAccount().equals(account)) {
+			if (StringUtils.isEmpty(name) == true) {
+				messages.add("名前を入力してください");
+			}
+			if (StringUtils.isEmpty(password) == true) {
+				messages.add("パスワードを入力してください");
+			}
 		} else {
-			return false;
+			if (new UserService().getUser(account) != null) {
+				messages.add("すでに使われているアカウント名です");
+			}
+			if (StringUtils.isEmpty(name)== true) {
+				messages.add("名前を入力してください");
+			}
+			if(StringUtils.isEmpty(password) == true){
+			  messages.add("パスワードを入力してください");
+			}
+		}
+		if(messages.size()==0){
+		return true;
+		}else{
+		return false;
 		}
 	}
-
 }

@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import BBS.beans.Post;
+import BBS.exception.NoRowsUpdatedRuntimeException;
 import BBS.exception.SQLRuntimeException;
 
 public class PostDao {
@@ -40,6 +41,31 @@ public class PostDao {
 			ps.setString(4, post.getCategory());
 
 			ps.executeUpdate();
+		} catch (SQLException e) {
+			throw new SQLRuntimeException(e);
+		} finally {
+			close(ps);
+		}
+	}
+
+	public void delete(Connection connection, int id) {
+
+		PreparedStatement ps = null;
+		try {
+			StringBuilder sql = new StringBuilder();
+			sql.append("DELETE FROM posts ");
+
+			sql.append(" WHERE");
+			sql.append(" id = ?");
+
+			ps = connection.prepareStatement(sql.toString());
+
+			ps.setInt(1, id);
+
+			int count = ps.executeUpdate();
+			if (count == 0) {
+				throw new NoRowsUpdatedRuntimeException();
+			}
 		} catch (SQLException e) {
 			throw new SQLRuntimeException(e);
 		} finally {

@@ -23,7 +23,7 @@ import BBS.beans.User;
 import BBS.service.CommentService;
 import BBS.service.PostService;
 
-@WebServlet(urlPatterns = { "/index" })
+@WebServlet(urlPatterns = { "/index.jsp" })
 public class TopServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -82,10 +82,10 @@ public class TopServlet extends HttpServlet {
 
 			new CommentService().register(comment);
 
-			response.sendRedirect("index");
+			response.sendRedirect("./");
 		} else {
 			session.setAttribute("errorMessages", comments);
-			response.sendRedirect("index");
+			response.sendRedirect("./");
 		}
 	}
 

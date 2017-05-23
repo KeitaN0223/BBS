@@ -57,7 +57,7 @@ public class CommentDao {
 			ps = connection.prepareStatement(sql.toString());
 
 			ps.setInt(1, id);
-System.out.println(ps);
+
 			int count = ps.executeUpdate();
 			if (count == 0) {
 				throw new NoRowsUpdatedRuntimeException();
