@@ -9,7 +9,7 @@
 <title>新規投稿画面</title>
 </head>
 <body>
-<a href="index">戻る</a>
+<a href="./">戻る</a>
 <c:forEach items="${errorMessages }" var="message">
 				<div class="errorMessages">
 		<ul>
@@ -23,20 +23,20 @@
 <form action="post" method="post">
 
 <div class="subject">
-	件名(50文字以下で入力)<br />
-	<textarea name="subject" rows="1" cols="100" class="subject-box"></textarea>
+	件名(50文字以下で入力してください)<br />
+	<textarea name="subject" rows="1" cols="100" class="subject-box"><c:out value ="${post.subject}"/></textarea>
 	<br />
 </div>
 
 <div class="form-area">
-	投稿内容(1000文字以下で入力)<br />
-	<textarea name="post" cols="100" rows="10" class="tweet-box"></textarea>
+	本文(1000文字以下で入力してください)<br />
+	<textarea name="post" cols="100" rows="10" class="tweet-box" ><c:out value ="${post.text}"/></textarea>
 	<br />
 </div>
 
 <div class="category">
-	カテゴリー<br />
-	<textarea name="category" rows="1" cols="20" class="category-box"></textarea>
+	カテゴリー(10文字以下で入力してください)<br />
+	<textarea name="category" rows="1" cols="20" class="category-box"><c:out value ="${post.category}"/></textarea>
 </div>
 	<input type="submit" value="投稿">
 </form>

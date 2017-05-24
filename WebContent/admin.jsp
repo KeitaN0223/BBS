@@ -41,8 +41,8 @@ function disp(str){
 		<c:forEach items="${account}" var="account">
 		<div class="account">
 	<form action="admin" method="post">
-		<span class="account">アカウント名<c:out value="${account.account }" /></span>
-		<span class="name">ユーザー名<c:out value="${account.name }" /></span>
+		<span class="account">ログインID:<c:out value="${account.account }" /></span>
+		<span class="name">ユーザー名:<c:out value="${account.name }" /></span>
 		<input type="hidden" name = "id" value="${account.id }">
 		<c:choose>
 			<c:when test ="${account.is_stopped == 0}">

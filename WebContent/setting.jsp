@@ -25,16 +25,19 @@
 
 <form action="setting" method="post" enctype="multipart/form-data"><br />
 
-	<label for="account">アカウント名</label>
+	<label for="account">ログインID:</label>
 	<input name="account" value="${editUser.account}" id="account" /><br />
 
-	<label for="name">名前</label>
+	<label for="name">名前:</label>
 	<input name="name" value="${editUser.name}" id="name"/><br />
 
-	<label for="password">パスワード</label>
+	<label for="password">パスワード:</label>
 	<input name="password" type="password" id="password"/> <br />
 
-	<label for="branch_id">支店名</label>
+	<label for="confirm_password">パスワード確認:</label>
+	<input name="confirm_password" type="password" id="confirm_password"/><br />
+
+	<label for="branch_id">支店名:</label>
 	<select name = "branch_id" size = "1">
 		<c:forEach items="${branches}" var="branch">
 			<c:if test="${editUser.branch_id == branch.id }" var="selected"/>
@@ -51,7 +54,7 @@
 		</c:forEach>
 	</select><br />
 
-	<label for="department_id">部署または役職</label>
+	<label for="department_id">部署または役職:</label>
 	<select name ="department_id" size ="1">
 		<c:forEach items="${departments}" var="department">
 			<c:if test="${editUser.department_id == department.id }" var="selected"/>

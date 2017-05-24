@@ -41,6 +41,7 @@ public class Post_commentDao {
 
 			ResultSet rs = ps.executeQuery();
 			List<Post_comment> ret = toUserMessageList(rs);
+
 			return ret;
 		} catch (SQLException e) {
 			throw new SQLRuntimeException(e);
@@ -61,6 +62,9 @@ public class Post_commentDao {
 				String name = rs.getString("name");
 				int post_id = rs.getInt("post_id");
 				String category = rs.getString("category");
+				int user_id = rs.getInt("user_id");
+				int branch_id = rs.getInt("branch_id");
+				int department_id = rs.getInt("department_id");
 				//String comment = rs.getString("comment");
 
 				Post_comment message = new Post_comment();
@@ -70,6 +74,9 @@ public class Post_commentDao {
 				message.setName(name);
 				message.setPost_id(post_id);
 				message.setCategory(category);
+				message.setUser_id(user_id);
+				message.setBranch_id(branch_id);
+				message.setDepartment_id(department_id);
 				//message.setComment(comment);
 
 				ret.add(message);

@@ -46,6 +46,9 @@ public class ShowCommentDao {
 				String name = rs.getString("name");
 				int post_id = rs.getInt("post_id");
 				int comment_id = rs.getInt("comment_id");
+				int user_id = rs.getInt("user_id");
+				int department_id = rs.getInt("department_id");
+				int branch_id = rs.getInt("branch_id");
 				//String comment = rs.getString("comment");
 
 				ShowComment message = new ShowComment();
@@ -54,6 +57,9 @@ public class ShowCommentDao {
 				message.setName(name);
 				message.setPost_id(post_id);
 				message.setComment_id(comment_id);
+				message.setUser_id(user_id);
+				message.setBranch_id(branch_id);
+				message.setDepartment_id(department_id);
 				//message.setComment(comment);
 
 				ret.add(message);

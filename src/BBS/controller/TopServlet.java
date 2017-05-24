@@ -34,12 +34,7 @@ public class TopServlet extends HttpServlet {
 		String startDate = null;
 		String endDate = null;
 		String category = null;
-				//request.getParameter("category");
-		//request.setAttribute("selectedCategory", category);
 
-		//if(!request.getParameter("category").isEmpty()){
-		//	category = request.getParameter("category");
-		//}
 		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		if(!StringUtils.isEmpty(request.getParameter("category"))){
@@ -56,7 +51,9 @@ public class TopServlet extends HttpServlet {
 		List<Category> categories = new PostService().getCategory(category);
 		List<Post_comment> posts = new PostService().getMessage(startDate, endDate, category);
 		List<ShowComment> comments = new CommentService().getMessage();
-
+		HttpSession session = request.getSession();
+		User loginUser = (User)session.getAttribute("loginUser");
+		request.setAttribute("loginUser", loginUser);
 		request.setAttribute("categories", categories);
 		request.setAttribute("posts", posts);
 		request.setAttribute("comments", comments);
@@ -84,7 +81,12 @@ public class TopServlet extends HttpServlet {
 
 			response.sendRedirect("./");
 		} else {
+			Comment comment = new Comment();
+			comment.setText(request.getParameter("comment"));
+			comment.setPost_id(Integer.parseInt(request.getParameter("post_id")));
+
 			session.setAttribute("errorMessages", comments);
+			session.setAttribute("comment", comment);
 			response.sendRedirect("./");
 		}
 	}
@@ -97,7 +99,7 @@ public class TopServlet extends HttpServlet {
 			comments.add("コメントを入力してください");
 		}
 		if (500 <= Comment.length()) {
-			comments.add("500文字以下で入力してください");
+			comments.add("コメントは500文字以下で入力してください");
 		}
 		if (comments.size() == 0) {
 			return true;

@@ -15,8 +15,7 @@ import BBS.exception.SQLRuntimeException;
 
 public class UserDao {
 
- 	public User getUser(Connection connection, String account,
-			String password) {
+	public User getUser(Connection connection, String account, String password) {
 
 		PreparedStatement ps = null;
 		try {
@@ -142,7 +141,9 @@ public class UserDao {
 			StringBuilder sql = new StringBuilder();
 			sql.append("UPDATE users SET");
 			sql.append("  account = ?");
-			sql.append(", password = ?");
+			if (!user.getPassword().isEmpty()) {
+				sql.append(", password = ?");
+			}
 			sql.append(", name = ?");
 			sql.append(", branch_id = ?");
 			sql.append(", department_id = ?");
@@ -153,11 +154,18 @@ public class UserDao {
 			ps = connection.prepareStatement(sql.toString());
 
 			ps.setString(1, user.getAccount());
-			ps.setString(2, user.getPassword());
-			ps.setString(3, user.getName());
-			ps.setInt(4, user.getBranch_id());
-			ps.setInt(5, user.getDepartment_id());
-			ps.setInt(6, user.getId());
+			if (user.getPassword().isEmpty()) {
+				ps.setString(2, user.getName());
+				ps.setInt(3, user.getBranch_id());
+				ps.setInt(4, user.getDepartment_id());
+				ps.setInt(5, user.getId());
+			} else {
+				ps.setString(2, user.getPassword());
+				ps.setString(3, user.getName());
+				ps.setInt(4, user.getBranch_id());
+				ps.setInt(5, user.getDepartment_id());
+				ps.setInt(6, user.getId());
+			}
 
 			int count = ps.executeUpdate();
 			if (count == 0) {
@@ -170,7 +178,7 @@ public class UserDao {
 		}
 	}
 
-	public void isStop(Connection connection, User user){
+	public void isStop(Connection connection, User user) {
 		PreparedStatement ps = null;
 		try {
 			StringBuilder sql = new StringBuilder();
@@ -195,7 +203,7 @@ public class UserDao {
 		}
 	}
 
-	public void isStart(Connection connection, User user){
+	public void isStart(Connection connection, User user) {
 		PreparedStatement ps = null;
 		try {
 			StringBuilder sql = new StringBuilder();
@@ -220,10 +228,10 @@ public class UserDao {
 		}
 	}
 
-	public List<User> getUserAccount(Connection connection, int num){
+	public List<User> getUserAccount(Connection connection, int num) {
 
 		PreparedStatement ps = null;
-		try{
+		try {
 			StringBuilder sql = new StringBuilder();
 			sql.append("SELECT * FROM users");
 
@@ -232,18 +240,18 @@ public class UserDao {
 			ResultSet rs = ps.executeQuery();
 			List<User> ret = toUserAccountList(rs);
 			return ret;
-		}catch(SQLException e){
+		} catch (SQLException e) {
 			throw new SQLRuntimeException(e);
-		}finally{
+		} finally {
 			close(ps);
 		}
 	}
 
-	private List<User> toUserAccountList(ResultSet rs)throws SQLException{
+	private List<User> toUserAccountList(ResultSet rs) throws SQLException {
 
 		List<User> ret = new ArrayList<User>();
-		try{
-			while (rs.next()){
+		try {
+			while (rs.next()) {
 				String account = rs.getString("account");
 				String name = rs.getString("name");
 				int id = rs.getInt("id");
@@ -258,7 +266,7 @@ public class UserDao {
 				ret.add(userAccount);
 			}
 			return ret;
-		}finally{
+		} finally {
 			close(rs);
 		}
 	}
